@@ -4,6 +4,10 @@ metadata:
   name: aks-tap
   namespace: aks-tap
 spec:
+  credentials:
+  - secretNameRef:
+      name: aks-tap-azure
+  keepLatestPodsOnly: true
   terraformVersion: "1.3.7"
   terraformModule:
     source: https://github.com/cdelashmutt-pivotal/terraform-accelerator.git
