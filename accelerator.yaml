@@ -1,0 +1,18 @@
+accelerator:
+  displayName: Azure AKS with Tanzu Application Platform
+  description: A simple Spring Cloud Function serverless app
+  iconUrl: https://tanzu.vmware.com/developer/images/icons/icon-tap.svg
+  tags:
+  - tanzu
+  - azure
+  - aks
+
+engine:
+  merge:
+  - include: ["README.md", ".gitignore"]
+  - include: ["**/*.tf"]
+    merge:
+    - type: ReplaceText
+      substitutions:
+      - text: "example-project"
+        with: "#projectName"
