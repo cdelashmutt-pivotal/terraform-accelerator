@@ -7,6 +7,21 @@ accelerator:
   - azure
   - aks
 
+  options:
+  - name: businessUnit
+    inputType: select
+    choices:
+    - value: gbs
+      text: GBS
+    - value: account-processing
+      text: Account Processing
+    - value: risk-management
+      text: Risk Management
+    - value: fts
+      text: FTS
+    defaultValue: gbs
+    required: true
+
 engine:
   merge:
   - include: ["README.md", ".gitignore"]
@@ -15,4 +30,4 @@ engine:
     - type: ReplaceText
       substitutions:
       - text: "example-project"
-        with: "#projectName"
+        with: "#businessUnit"
