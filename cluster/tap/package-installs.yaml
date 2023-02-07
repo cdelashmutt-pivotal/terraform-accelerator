@@ -1,0 +1,52 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: tap
+    kapp.k14s.io/change-rule.serviceaccount-del: "delete before deleting tap-serviceaccount"
+  name: tap
+  namespace: tap-install
+spec:
+  packageRef:
+    refName: tap.tanzu.vmware.com
+    versionSelection:
+      constraints: ">=1.4.0 <1.5.0"
+      prereleases: {}
+  serviceAccountName: tap-package-install-sa
+  values:
+  - secretRef:
+      name: tap-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tap-values
+  namespace: tap-install
+stringData:
+  tap-values.yaml: |
+    profile: view
+    ceip_policy_disclosed: true
+
+    shared:
+      ingress_domain: "20-22-34-151.nip.io"
+
+    tap_gui:
+      service_type: ClusterIP
+      ingressEnabled: true
+      app_config:
+        organization:
+          name: vmware
+        catalog:
+          locations:
+            - type: url
+              target: https://github.com/cdelashmutt-pivotal/central-gitops/blob/main/catalog/catalog-info.yaml
+        kubernetes:
+          serviceLocatorMethod:
+            type: 'multiTenant'
+
+    appliveview:
+      ingressEnabled: true
+
+    tap_telemetry:
+      installed_for_vmware_internal_use: "true"

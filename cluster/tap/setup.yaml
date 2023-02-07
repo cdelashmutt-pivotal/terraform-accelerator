@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tap-install
+---
+apiVersion: v1
+stringData:
+  .dockerconfigjson: |
+    {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.tanzunet_username @)","password":"(@= data.values.tanzunet_password @)"}}}
+kind: Secret
+metadata:
+  name: tap-registry
+  namespace: tap-install
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tap-registry
+  namespace: tap-install
+spec:
+  toNamespaces:
+  - '*'
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  finalizers:
+  - finalizers.packagerepository.packaging.carvel.dev/delete
+  name: tanzu-tap-repository
+  namespace: tap-install
+spec:
+  fetch:
+    imgpkgBundle:
+      image: harbor.workshop.amer.end2end.link/registry-tanzu/tap-packages:1.4.0
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tap-package-install-cluster-admin-role
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tap-packge-install-cluster-admin-role-binding
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tap-package-install-cluster-admin-role
+subjects:
+- kind: ServiceAccount
+  name: tap-package-install-sa
+  namespace: tap-install
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tap-package-install-sa
+  namespace: tap-install
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount

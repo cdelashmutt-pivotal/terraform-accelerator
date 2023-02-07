@@ -1,6 +1,6 @@
 accelerator:
   displayName: Azure AKS with Tanzu Application Platform
-  description: A simple Spring Cloud Function serverless app
+  description: Terraform scripts and kapp-controller resources to bootstrap at TAP Cluster
   iconUrl: https://tanzu.vmware.com/developer/images/icons/icon-tap.svg
   tags:
   - tanzu
