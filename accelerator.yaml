@@ -3,6 +3,7 @@ accelerator:
   description: Terraform scripts and kapp-controller resources to bootstrap at TAP Cluster
   iconUrl: https://tanzu.vmware.com/developer/images/icons/icon-tap.svg
   tags:
+  - infrastructure
   - tanzu
   - azure
   - aks
@@ -24,7 +25,7 @@ accelerator:
 
 engine:
   merge:
-  - include: ["README.md", ".gitignore"]
+  - include: ["README.md", ".gitignore", "cluster/**"]
   - include: ["**/*.tf"]
     merge:
     - type: ReplaceText
