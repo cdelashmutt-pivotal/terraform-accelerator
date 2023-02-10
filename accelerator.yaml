@@ -10,6 +10,7 @@ accelerator:
 
   options:
   - name: businessUnit
+    label: Business Unit
     inputType: select
     choices:
     - value: gbs
@@ -23,9 +24,25 @@ accelerator:
     defaultValue: gbs
     required: true
 
+  - name: environments
+    label: Development
+    inputType: checkbox
+    dataType: [string]
+    defaultValue:
+    - dev
+    choices:
+    - text: Development
+      value: dev
+    - text: Quality Assurance
+      value: qa
+    - text: User Acceptance Testing
+      value: uat
+    - text: Production
+      value: prod
+
 engine:
   merge:
-  - include: ["README.md", ".gitignore", "cluster/**"]
+  - include: ["README.md", ".gitignore", "cluster/**/*"]
   - include: ["**/*.tf"]
     merge:
     - type: ReplaceText
