@@ -27,15 +27,15 @@ metadata:
 stringData:
   #@yaml/text-templated-strings
   tap-values.yaml: |
-    profile: (@= data.values.tap_profile @)
+    profile: (@= data.values.tap.profile @)
     ceip_policy_disclosed: true
 
     shared:
-      ingress_domain: "INGRESS-DOMAIN"
+      ingress_domain: (@= data.values.tap.domain @)
       image_registry:
-        project_path: "REGISTRY-SERVER/tap"
-        #username: "KP-DEFAULT-REPO-USERNAME"
-        #password: "KP-DEFAULT-REPO-PASSWORD"
+        project_path: (@= data.values.registry.url @)/tap
+        username: (@= data.values.registry.username @)
+        password: (@= data.values.registry.password @)
     
     supply_chain: basic
 
@@ -46,7 +46,7 @@ stringData:
       backend:
         sslDeactivated: false
         ingressEnabled: true
-        host: appliveview.VIEW-CLUSTER-INGRESS-DOMAIN
+        host: appliveview.(@= data.values.tap.view_cluster_domain @)
 
     tap_telemetry:
       installed_for_vmware_internal_use: "true"

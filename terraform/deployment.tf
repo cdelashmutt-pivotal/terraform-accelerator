@@ -29,7 +29,10 @@ resource "kubernetes_secret" "cluster-install-secrets" {
     "inline-values" : <<EOF
       tanzunet_username: ${var.tanzunet_username}
       tanzunet_password: ${var.tanzunet_password}
-      tap_profile: ${var.tap_profile}
+      tap:
+        profile: ${var.tap_profile}
+        domain: ${azurerm_dns_zone.dns.name}
+        view_cluster_domain: ${var.view_cluster_domain}
       registry:
         url: ${azurerm_container_registry.default.login_server}
         username: ${azurerm_container_registry.default.admin_username}
@@ -39,6 +42,14 @@ resource "kubernetes_secret" "cluster-install-secrets" {
         ref: origin/${var.gitops_repo_branch}
         branch: ${var.gitops_repo_branch}
         subPath: ${var.gitops_repo_subPath}
+      azure:
+        tenant_id: ${data.azurerm_client_config.current.tenant_id}
+        subscription_id: ${data.azurerm_client_config.current.subscription_id}
+        external_dns:
+          resource_group: ${azurerm_resource_group.default.name}
+          client_id: ${azuread_application.external_dns.application_id}
+          client_secret: ${azuread_application_password.external_dns.value}
+
     EOF
   }
 }

@@ -1,0 +1,73 @@
+#@ load("@ytt:data", "data")
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: external-dns
+    kapp.k14s.io/change-rule.serviceaccount-del: "delete before deleting external-dns-serviceaccount"
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: external-dns-overlay
+  name: external-dns
+  namespace: external-dns-install
+spec:
+  packageRef:
+    refName: external-dns.tanzu.vmware.com
+    versionSelection:
+      constraints: ">=0.11.0 <1.0.0"
+  serviceAccountName: external-dns-install-sa
+  values:
+  - secretRef:
+      key: inline-values
+      name: external-dns-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: external-dns-values
+  namespace: external-dns-install
+stringData:
+  #@yaml/text-templated-strings
+  inline-values: |
+    deployment:
+        args:
+        - --source=service
+        - --source=ingress
+        - --source=contour-httpproxy
+        - --provider=azure
+        - --policy=sync
+        - --registry=txt
+        - --domain-filter=(@= data.values.tap.domain @)
+        - --azure-resource-group=(@= data.values.azure.external_dns.resource_group @)
+        volumeMounts:
+        - name: azure-config-file
+          mountPath: /etc/kubernetes
+          readOnly: true
+        volumes:
+        - name: azure-config-file
+          secret:
+            secretName: external-dns-credentials
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: external-dns-overlay
+  namespace: external-dns-install
+stringData:
+  #@yaml/text-templated-strings
+  secret.yaml: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: external-dns-credentials
+      namespace: tanzu-system-service-discovery
+    stringData:
+      azure.json: |
+        {
+          "tenantId": "(@= data.values.azure.tenant_id @)",
+          "subscriptionId": "(@= data.values.azure.subscription_id @)",
+          "resourceGroup": "(@= data.values.azure.external_dns.resource_group @)",
+          "aadClientId": "(@= data.values.azure.external_dns.client_id @)",
+          "aadClientSecret": "(@= data.values.azure.external_dns.client_secret @)"
+        }
