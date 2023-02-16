@@ -1,7 +1,7 @@
 resource "tanzu-mission-control_cluster_group" "cluster_group" {
-  name = local.project_name
+  name = var.project_name
   meta {
-    description = "Cluster group for ${local.project_name} clusters"
+    description = "Cluster group for ${var.project_name} clusters"
   }
 }
 
@@ -16,8 +16,8 @@ resource "tanzu-mission-control_cluster" "attach_aks_cluster_with_kubeconfig" {
   }
 
   meta {
-    description = "${local.project_name} clusters"
-    labels      = { "type" : "${local.project_name}" }
+    description = "${var.project_name} clusters"
+    labels      = { "type" : "${var.project_name}" }
   }
 
   spec {

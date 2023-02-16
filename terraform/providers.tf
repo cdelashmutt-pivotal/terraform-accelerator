@@ -14,7 +14,11 @@ terraform {
     }
     tanzu-mission-control = {
       source = "vmware/tanzu-mission-control"
-      version = ">= 1.1.4"
+      version = ">= 1.1.5"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.15.0"
     }
   }
 
@@ -25,7 +29,7 @@ terraform {
 ## The referenced object is in aks-cluster.tf
 resource "local_file" "kubeconfig" {
   content  = azurerm_kubernetes_cluster.default.kube_config_raw
-  filename = "${path.root}/.terraform/tmp/central-kubeconfig"
+  filename = "${path.root}/.terraform/tmp/${var.project_name}-kubeconfig"
 }
 
 provider "kubernetes" {

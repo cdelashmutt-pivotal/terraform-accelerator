@@ -1,9 +1,5 @@
-locals {
-  project_name = "example-project"
-}
-
 resource "azurerm_resource_group" "default" {
-  name     = "${local.project_name}-rg"
+  name     = "${var.project_name}-rg"
   location = "East US 2"
 
   tags = {
@@ -12,10 +8,10 @@ resource "azurerm_resource_group" "default" {
 }
 
 resource "azurerm_kubernetes_cluster" "default" {
-  name                = "${local.project_name}-aks"
+  name                = "${var.project_name}-aks"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  dns_prefix          = "${local.project_name}-k8s"
+  dns_prefix          = "${var.project_name}-k8s"
 
   default_node_pool {
     name            = "default"
@@ -37,18 +33,12 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 }
 
-resource "random_string" "resource_code" {
-  length  = 5
-  special = false
-  upper   = false
-}
-
 resource "azurerm_container_registry" "default" {
-  name                = "tapregistry${random_string.resource_code.result}"
+  name                = "${var.project_name}cdelashmuttvmware"
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
   sku                 = "Basic"
-  admin_enabled       = false
+  admin_enabled       = true
 }
 
 resource "azurerm_role_assignment" "cluster-acr-role-pull" {

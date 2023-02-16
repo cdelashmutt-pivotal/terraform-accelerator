@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 ---
 apiVersion: v1
 kind: Namespace
@@ -8,6 +9,25 @@ apiVersion: v1
 stringData:
   .dockerconfigjson: |
     {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.tanzunet_username @)","password":"(@= data.values.tanzunet_password @)"}}}
+kind: Secret
+metadata:
+  name: tanzu-registry
+  namespace: tap-install
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tanzu-registry
+  namespace: tap-install
+spec:
+  toNamespaces:
+  - '*'
+---
+apiVersion: v1
+stringData:
+  .dockerconfigjson: |
+    {"auths":{"(@= data.values.registry.url @)":{"username":"(@= data.values.registry.username @)","password":"(@= data.values.registry.password @)"}}}
 kind: Secret
 metadata:
   name: tap-registry
@@ -33,7 +53,7 @@ metadata:
 spec:
   fetch:
     imgpkgBundle:
-      image: harbor.workshop.amer.end2end.link/registry-tanzu/tap-packages:1.4.0
+      image: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.4.0
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

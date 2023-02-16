@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
@@ -24,29 +25,28 @@ metadata:
   name: tap-values
   namespace: tap-install
 stringData:
+  #@yaml/text-templated-strings
   tap-values.yaml: |
-    profile: view
+    profile: (@= data.values.tap_profile @)
     ceip_policy_disclosed: true
 
     shared:
-      ingress_domain: "20-22-34-151.nip.io"
+      ingress_domain: "INGRESS-DOMAIN"
+      image_registry:
+        project_path: "REGISTRY-SERVER/tap"
+        #username: "KP-DEFAULT-REPO-USERNAME"
+        #password: "KP-DEFAULT-REPO-PASSWORD"
+    
+    supply_chain: basic
 
-    tap_gui:
-      service_type: ClusterIP
-      ingressEnabled: true
-      app_config:
-        organization:
-          name: vmware
-        catalog:
-          locations:
-            - type: url
-              target: https://github.com/cdelashmutt-pivotal/central-gitops/blob/main/catalog/catalog-info.yaml
-        kubernetes:
-          serviceLocatorMethod:
-            type: 'multiTenant'
+    image_policy_webhook:
+      allow_unmatched_tags: true
 
-    appliveview:
-      ingressEnabled: true
+    appliveview_connector:
+      backend:
+        sslDeactivated: false
+        ingressEnabled: true
+        host: appliveview.VIEW-CLUSTER-INGRESS-DOMAIN
 
     tap_telemetry:
       installed_for_vmware_internal_use: "true"
