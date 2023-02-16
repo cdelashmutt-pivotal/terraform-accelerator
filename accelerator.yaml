@@ -1,6 +1,6 @@
 accelerator:
   displayName: Azure AKS with Tanzu Application Platform
-  description: Terraform scripts and kapp-controller resources to bootstrap at TAP Cluster
+  description: Terraform scripts and kapp-controller resources to bootstrap TAP for an organizational unit
   iconUrl: https://tanzu.vmware.com/developer/images/icons/icon-tap.svg
   tags:
   - infrastructure
@@ -40,12 +40,52 @@ accelerator:
     - text: Production
       value: prod
 
+  - name: devTapProfile
+    label: Development Cluster TAP Profile
+    inputType: select
+    dependsOn:
+      name: environments
+      value: [dev]
+    choices:
+    - value: iterate
+      text: iterate
+    - value: full
+      text: Full
+    defaultValue: iterate
+
+  - name: centralClusterIngress
+    label: Central Cluster Ingress Domain
+    inputType: text
+    dataType: string
+    defaultValue: central.azure.grogscave.net
+
 engine:
   merge:
-  - include: ["README.md", ".gitignore", "cluster/**/*"]
+  - include: [".gitignore"]
+ 
+  - include: ["README.md"]
+    merge:
+    - type: ReplaceText
+      substitutions:
+        - text: "NAMESPACE"
+          with: "#businessUnit"
+
+  - include: ["cluster/**/*"]
+    merge:
+    - type: ReplaceText
+      substitutions:
+        - text: "INGRESS-DOMAIN"
+          with: "#businessUnit + '.azure.grogscave.net'"
+        - text: "REGISTRY-SERVER"
+          with: "#businessUnit + 'cdelashmuttvmware'"
+        - text: "VIEW-CLUSTER-INGRESS-DOMAIN"
+          with: "#centralClusterIngress"
+
   - include: ["**/*.tf"]
     merge:
     - type: ReplaceText
       substitutions:
-      - text: "example-project"
+      - text: "EXAMPLE_PROJECT_NAME"
         with: "#businessUnit"
+      - text: "TAP_PROFILE"
+        with: "#devTapProfile"
