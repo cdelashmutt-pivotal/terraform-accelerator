@@ -59,5 +59,7 @@ stringData:
       - git:
           url: git@github.com:cdelashmutt-pivotal/test-private.git
           ref: origin/master
+          subPath: custom-resources
           secretRef:
             name: git-ssh
+        path: _ytt_lib/objects
