@@ -58,7 +58,7 @@ stringData:
       additional_sources:
       - git:
           url: git@github.com:cdelashmutt-pivotal/test-private.git
-          ref: origin/master
+          ref: origin/main
           subPath: custom-resources
           secretRef:
             name: git-ssh
