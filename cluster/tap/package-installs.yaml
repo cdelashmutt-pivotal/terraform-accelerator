@@ -53,13 +53,13 @@ stringData:
     tap_telemetry:
       installed_for_vmware_internal_use: "true"
     
-    namespace_provisioner:
-      controller: false
-      additional_sources:
-      - git:
-          url: git@github.com:cdelashmutt-pivotal/test-private.git
-          ref: origin/main
-          subPath: custom-resources
-          secretRef:
-            name: git-ssh
-        path: _ytt_lib/objects
+    # namespace_provisioner:
+    #   controller: false
+    #   additional_sources:
+    #   - git:
+    #       url: git@github.com:cdelashmutt-pivotal/test-private.git
+    #       ref: origin/main
+    #       subPath: custom-resources
+    #       secretRef:
+    #         name: git-ssh
+    #     path: _ytt_lib/objects
