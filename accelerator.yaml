@@ -24,34 +24,72 @@ accelerator:
     defaultValue: gbs
     required: true
 
-  - name: environments
+  - name: devEnvironment
     label: Development
     inputType: checkbox
-    dataType: [string]
-    defaultValue:
-    - dev
-    choices:
-    - text: Development
-      value: dev
-    - text: Quality Assurance
-      value: qa
-    - text: User Acceptance Testing
-      value: uat
-    - text: Production
-      value: prod
+    dataType: boolean
 
   - name: devTapProfile
     label: Development Cluster TAP Profile
     inputType: select
     dependsOn:
-      name: environments
-      value: [dev]
+      name: devEnvironment
+      value: true
     choices:
     - value: iterate
       text: iterate
     - value: full
       text: Full
     defaultValue: iterate
+
+  - name: devNetwork
+    label: Network for Development Cluster TAP Profile
+    inputType: select
+    dependsOn:
+      name: devEnvironment
+      value: true
+    choices:
+    - value: net1
+      text: network1
+    - value: net2
+      text: network2
+    defaultValue: net1
+
+  - name: qaEnvironment
+    label: QA
+    inputType: checkbox
+    dataType: boolean
+
+  - name: qaNetwork
+    label: Network for QA Cluster TAP Profile
+    inputType: select
+    dependsOn:
+      name: qaEnvironment
+      value: true
+    choices:
+    - value: net1
+      text: network1
+    - value: net2
+      text: network2
+    defaultValue: net1
+
+  - name: prodEnvironment
+    label: Production
+    inputType: checkbox
+    dataType: boolean
+
+  - name: prodNetwork
+    label: Network for Staging and Prod Cluster TAP Profile
+    inputType: select
+    dependsOn:
+      name: prodEnvironment
+      value: true
+    choices:
+    - value: net1
+      text: network1
+    - value: net2
+      text: network2
+    defaultValue: net1
 
   - name: centralClusterIngress
     label: Central Cluster Ingress Domain
