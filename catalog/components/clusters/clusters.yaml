@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gbs-clusters
+  description: Clusters for GBS
+  tags:
+    - infrastructure
+    - tanzu
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=gbs'
+spec:
+  type: service
+  lifecycle: production
+  owner: default-team

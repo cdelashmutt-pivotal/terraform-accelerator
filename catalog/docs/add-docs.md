@@ -1,0 +1,2 @@
+# Adding Documentation
+To add new documentation to this site, go to the catalog entity you want to edit documentation for and click the "Pencil" icon on the page for that entity.  There will be a "docs" subfolder in the folder that entity is in, and you can edit the docs and submit a PR to have them integrated.
