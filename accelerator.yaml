@@ -37,7 +37,7 @@ accelerator:
       value: true
     choices:
     - value: iterate
-      text: iterate
+      text: Iterate
     - value: full
       text: Full
     defaultValue: iterate
@@ -59,6 +59,7 @@ accelerator:
     label: QA
     inputType: checkbox
     dataType: boolean
+    defaultValue: false
 
   - name: qaNetwork
     label: Network for QA Cluster TAP Profile
@@ -77,6 +78,7 @@ accelerator:
     label: Production
     inputType: checkbox
     dataType: boolean
+    defaultValue: false
 
   - name: prodNetwork
     label: Network for Staging and Prod Cluster TAP Profile

@@ -5,6 +5,11 @@ This repository contains your terraform scripts for deploying an AKS cluster wit
 
 Add these manifests to your central cluster:
 ```
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: NAMESPACE
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -12,7 +17,7 @@ metadata:
   namespace: NAMESPACE
 spec:
   interval: 30s
-  url: https://github.com/tf-controller/helloworld
+  url: https://github.com/cdelashmutt-pivotal/terraform-accelerator
   ref:
     branch: main
 ---
@@ -23,7 +28,6 @@ metadata:
   namespace: NAMESPACE
 spec:
   interval: 1m
-  approvePlan: auto
   path: ./terraform
   sourceRef:
     kind: GitRepository
