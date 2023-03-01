@@ -106,7 +106,7 @@ engine:
   condition: "#bsGitRepository != null"
 
   merge:
-  - include: [".gitignore"]
+  - include: [".gitignore", "custom-resources/**/*", "overlays/**/*"]
  
   - include: ["README.md"]
     merge:
@@ -114,6 +114,9 @@ engine:
       substitutions:
         - text: "NAMESPACE"
           with: "#businessUnit"
+    - type: ReplaceText
+      condition: "#bsGitRepository != null"
+      substitutions:
         - text: "https://github.com/cdelashmutt-pivotal/terraform-accelerator"
           with: "#repoUrl.scheme + '://' + #repoUrl.host + '/' + #repoUrl.queryParams['owner'][0] + '/' + #repoUrl.queryParams['repo'][0]"
         - text: "branch: main"
