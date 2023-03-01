@@ -131,6 +131,8 @@ engine:
           with: "#centralClusterIngress"
 
   - include: ["**/*.tf"]
+  
+  - include: ["terraform/terraform.tfvars"]
     merge:
     - type: ReplaceText
       substitutions:
