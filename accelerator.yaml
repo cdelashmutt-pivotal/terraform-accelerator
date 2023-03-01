@@ -140,6 +140,8 @@ engine:
         with: "#businessUnit"
       - text: "TAP_PROFILE"
         with: "#devTapProfile"
+      - text: "DEV_NETWORK"
+        with: "#devNetwork"
 
   - include: ["catalog/**/*"]
     merge:
