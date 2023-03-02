@@ -39,7 +39,10 @@ stringData:
         username: (@= data.values.registry.username @)
         password: (@= data.values.registry.password @)
     
-    supply_chain: basic
+    supply_chain: testing_scanning
+
+    metadata_store:
+      ns_for_export_app_cert: "*"
 
     image_policy_webhook:
       allow_unmatched_tags: true
@@ -53,13 +56,16 @@ stringData:
     tap_telemetry:
       installed_for_vmware_internal_use: "true"
     
-    # namespace_provisioner:
-    #   controller: false
-    #   additional_sources:
-    #   - git:
-    #       url: git@github.com:cdelashmutt-pivotal/test-private.git
-    #       ref: origin/main
-    #       subPath: custom-resources
-    #       secretRef:
-    #         name: git-ssh
-    #     path: _ytt_lib/objects
+    namespace_provisioner:
+      additional_sources:
+      - git:
+          url: (@= data.values.gitops.repo @)
+          ref: (@= data.values.gitops.ref @)
+          subPath: namespace-provisioner-resources/objects
+        path: _ytt_lib/objects
+      - git:
+          url: (@= data.values.gitops.repo @)
+          ref: (@= data.values.gitops.ref @)
+          subPath: namespace-provisioner-resources/overlays
+        path: _ytt_lib/customize
+      

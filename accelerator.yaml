@@ -134,8 +134,11 @@ engine:
 
   - include: ["**/*.tf"]
   
-  - include: ["terraform/terraform.tfvars"]
+  - include: ["terraform/terraform.tfvars.off"]
     merge:
+    - type: RewritePath
+      regex: "terraform/terraform.tfvars.off"
+      rewriteTo: "terraform/terraform.tfvars"
     - type: ReplaceText
       substitutions:
       - text: "EXAMPLE_PROJECT_NAME"
