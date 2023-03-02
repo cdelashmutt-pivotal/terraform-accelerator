@@ -61,11 +61,11 @@ stringData:
       - git:
           url: (@= data.values.gitops.repo @)
           ref: (@= data.values.gitops.ref @)
-          subPath: namespace-provisioner-resources/objects
+          subPath: cluster/namespace-provisioner-resources/objects
         path: _ytt_lib/objects
       - git:
           url: (@= data.values.gitops.repo @)
           ref: (@= data.values.gitops.ref @)
-          subPath: namespace-provisioner-resources/overlays
+          subPath: cluster/namespace-provisioner-resources/overlays
         path: _ytt_lib/customize
       
